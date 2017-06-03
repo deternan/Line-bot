@@ -59,7 +59,7 @@ public class EchoApplication
 		if(check == true){
 			return_str = "Non English";
 		}else{
-			c = "English";
+			return_str = "English";
 		}
 		
 		return return_str;
