@@ -28,7 +28,8 @@ import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
 @SpringBootApplication
 @LineMessageHandler
-public class EchoApplication {
+public class EchoApplication 
+{
     public static void main(String[] args) {
         SpringApplication.run(EchoApplication.class, args);
     }
@@ -36,11 +37,31 @@ public class EchoApplication {
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         System.out.println("event: " + event);
-        return new TextMessage("Auto:  "+event.getMessage().getText());
+		// CJKV check
+		String get_return = CJKV_check(event.getMessage().getText());
+		return new TextMessage(get_return);
+        //return new TextMessage("Auto:  "+event.getMessage().getText());
     }
 
     @EventMapping
     public void handleDefaultMessageEvent(Event event) {
         System.out.println("event: " + event);
     }
+	
+	public String CJKV_check(String input_str)
+	{
+		boolean check;
+		String return_str = "";
+		check = input_str.codePoints().anyMatch(codepoint ->
+	            Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.HAN);
+		
+		//System.out.println(check);
+		if(check == true){
+			return_str = "Non English";
+		}else{
+			c = "English";
+		}
+		
+		return return_str;
+	}
 }
