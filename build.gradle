@@ -91,8 +91,7 @@ subprojects {
             dependency 'com.squareup.retrofit2:retrofit:2.2.0'
             dependency 'org.assertj:assertj-core:3.6.2'
             dependency 'org.projectlombok:lombok:1.16.12'
-            dependency 'com.fasterxml.jackson.core:jackson-databind:2.8.8.1'
-            compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
+            dependency 'com.fasterxml.jackson.core:jackson-databind:2.8.8.1'            
         }
     }
 
@@ -108,6 +107,8 @@ subprojects {
         testCompile 'org.hibernate:hibernate-validator'
         testCompile 'org.springframework.boot:spring-boot-starter-test' // MockHttpServletRequest
         testCompile 'org.springframework.boot:spring-boot-starter-logging'
+        
+        compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
     }
 
     compileJava.dependsOn(processResources) // http://docs.spring.io/spring-boot/docs/current/reference/html/configuration-metadata.html#configuration-metadata-annotation-processor
