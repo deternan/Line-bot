@@ -47,24 +47,25 @@ public class EchoApplication
 	boolean digital_check;
 	boolean character_check;
 	// Pattern expression
-	private static Pattern p;
-	private static Matcher m;
-	private static String space_pattern = "^[0-9]";
+	private Pattern p;
+	private Matcher m;
+	private String space_pattern = "^[0-9]";
 	// Stock info
-	private static Vector code = new Vector();
-	private static Vector name = new Vector();
+	private Vector code = new Vector();
+	private Vector name = new Vector();
 	
 	
     public static void main(String[] args) 
-    {
-    	Read_Taiwan_StockID();
+    {    	
     	SpringApplication.run(EchoApplication.class, args);
     }
 
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) 
     {
-        System.out.println("event: " + event);
+    	Read_Taiwan_StockID();
+    	
+    	System.out.println("event: " + event);
         
         String get_return;
 		// CJKV check
@@ -137,7 +138,7 @@ public class EchoApplication
     	
     }
     
-    private static void Read_Taiwan_StockID() throws Exception
+    private void Read_Taiwan_StockID() throws Exception
 	{		
 		String url = "http://isin.twse.com.tw/isin/C_public.jsp?strMode=2";
 		// JSoup Example 2 - Reading HTML page from URL
@@ -198,7 +199,7 @@ public class EchoApplication
 		return check;
 	}
     
-    private static void Separation(String input)
+    private void Separation(String input)
 	{
 		String code_temp = input.substring(0, 4);
 		String name_temp = input.substring(5, input.length());
