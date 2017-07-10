@@ -19,6 +19,7 @@
 
 package com.example.bot.spring.echo;
 
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,18 +33,37 @@ import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
 @SpringBootApplication
 @LineMessageHandler
 public class EchoApplication 
 {
 	boolean digital_check;
+	boolean character_check;
+	// Pattern expression
+	private static Pattern p;
+	private static Matcher m;
+	private static String space_pattern = "^[0-9]";
+	// Stock info
+	private static Vector code = new Vector();
+	private static Vector name = new Vector();
 	
-    public static void main(String[] args) {
-        SpringApplication.run(EchoApplication.class, args);
+	
+    public static void main(String[] args) 
+    {
+    	Read_Taiwan_StockID();
+    	SpringApplication.run(EchoApplication.class, args);
     }
 
     @EventMapping
-    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
+    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) 
+    {
         System.out.println("event: " + event);
         
         String get_return;
@@ -56,12 +76,18 @@ public class EchoApplication
         //get_return = Regular_Expression_Digital(event.getMessage().getText());
         digital_check = Regular_Expression_Digital(event.getMessage().getText());
         if(digital_check == true){
-        	get_return = "4 digital";
+        	if(event.getMessage().getText().length() == 4){
+        		get_return = "4 digital";
+        		GetStockInfor(get_return);
+        	}else{
+        		get_return = "Please input 4 digital code or Stock name";
+        	}        	
         }else{
         	get_return = "illegal";
         }
         
-        return new TextMessage(get_return);
+        //return new TextMessage(get_return);
+        return new TextMessage(code.size()+"	"+name.size());
     }
 
     @EventMapping
@@ -69,18 +95,17 @@ public class EchoApplication
         System.out.println("event: " + event);
     }
 	
-    private boolean Regular_Expression_Digital(String temp_str)
+    private boolean Regular_Expression_Digital(String input_str)
     {
     	//Regular_Expression
     	String num_pattern = "[0-9]{4}";    	
 
     	// Number check
     	Pattern p = Pattern.compile(num_pattern);
-    	Matcher  m = p.matcher(temp_str);
+    	Matcher  m = p.matcher(input_str);
         
     	boolean digital_temp;
-    	if(m.find()){
-        	//System.out.println(m.group());
+    	if(m.find()){        	
     		digital_temp = true;
         }else{
         	digital_temp = false;
@@ -89,7 +114,98 @@ public class EchoApplication
     	return digital_temp;
     }
     
+//    private boolean Regular_Expression_Chines(String input_str)
+//    {
+//    	boolean check;
+//		String return_str = "";
+//		check = input_str.codePoints().anyMatch(codepoint ->
+//	            Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.HAN);
+//		
+//		if(check == true){
+//			//return_str = "Non English";
+//			check = true;
+//		}else{
+//			//return_str = "English";
+//			check = false;
+//		}		
+//		
+//		return check;
+//    }
     
+    private void GetStockInfor(String input)
+    {
+    	
+    }
+    
+    private static void Read_Taiwan_StockID() throws Exception
+	{		
+		String url = "http://isin.twse.com.tw/isin/C_public.jsp?strMode=2";
+		// JSoup Example 2 - Reading HTML page from URL
+		Document doc = Jsoup.connect(url).timeout(5000).get();
+		doc.outputSettings().charset("UTF-8");
+		
+		// body
+		Elements iframe_ele = doc.select("body");
+		if((iframe_ele.size() > 0)){
+			//System.out.println(iframe_ele);
+		}
+		
+		String temp_str;
+		
+		// div embed
+		Elements div_embed_ele = doc.select("tr");
+		if ((div_embed_ele.size() > 0)) {
+			//System.out.println(div_embed_ele);
+		}
+		//System.out.println(div_embed_ele.size());
+		
+		boolean dig_check;
+		for(int i=0; i<div_embed_ele.size(); i++)
+		{
+			//System.out.println(i+"	"+div_embed_ele.get(i));
+			//System.out.println(i+"	"+div_embed_ele.get(i).childNodeSize());
+			// childNode()
+			if(div_embed_ele.get(i).childNodeSize() == 7){
+				//System.out.println(i+"	"+div_embed_ele.get(i).child(0));
+				temp_str = div_embed_ele.get(i).child(0).toString().substring(22, div_embed_ele.get(i).child(0).toString().indexOf("</td>"));
+				dig_check = Pattern_expression_digital(temp_str);
+				if(dig_check == true){
+					Separation(temp_str);
+				}			
+			}	
+		}
+	}
+
+    private static boolean Pattern_expression_digital(String input)
+	{
+		boolean check = false;
+		String temp;
+		if(input.trim().length() < 5){
+			temp = input.trim();
+		}else{
+			temp = input.substring(4, 5).trim();
+		}
+		//System.out.println(temp);
+        p = Pattern.compile(space_pattern);
+        m = p.matcher(temp);
+        if(m.find()){
+        	//System.out.println("Not Digital");
+        	check = false;
+        }else{
+        	check = true;
+        }
+		
+		return check;
+	}
+    
+    private static void Separation(String input)
+	{
+		String code_temp = input.substring(0, 4);
+		String name_temp = input.substring(5, input.length());
+		
+		code.add(code_temp);
+		name.add(name_temp);
+	}
     
 //	private String CJKV_check(String input_str)
 //	{
