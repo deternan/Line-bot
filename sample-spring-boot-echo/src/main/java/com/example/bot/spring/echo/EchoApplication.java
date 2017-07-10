@@ -31,12 +31,13 @@ import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.Pattern;
 
 @SpringBootApplication
 @LineMessageHandler
 public class EchoApplication 
 {
+	boolean digital_check;
+	
     public static void main(String[] args) {
         SpringApplication.run(EchoApplication.class, args);
     }
@@ -52,7 +53,14 @@ public class EchoApplication
         //return new TextMessage("Auto:  "+event.getMessage().getText());
         
         // Digital check
-        get_return = Regular_Expression_Digital(event.getMessage().getText());
+        //get_return = Regular_Expression_Digital(event.getMessage().getText());
+        digital_check = Regular_Expression_Digital(event.getMessage().getText());
+        if(digital_check == true){
+        	get_return = "4 digital";
+        }else{
+        	get_return = "illegal";
+        }
+        
         return new TextMessage(get_return);
     }
 
@@ -61,7 +69,7 @@ public class EchoApplication
         System.out.println("event: " + event);
     }
 	
-    private String Regular_Expression_Digital(String temp_str)
+    private boolean Regular_Expression_Digital(String temp_str)
     {
     	//Regular_Expression
     	String num_pattern = "[0-9]{4}";    	
@@ -70,14 +78,18 @@ public class EchoApplication
     	Pattern p = Pattern.compile(num_pattern);
     	Matcher  m = p.matcher(temp_str);
         
-    	boolean digital_check;
+    	boolean digital_temp;
     	if(m.find()){
         	//System.out.println(m.group());
-    		digital_check = true;
+    		digital_temp = true;
         }else{
-        	digital_check = false;
+        	digital_temp = false;
         }
+    	
+    	return digital_temp;
     }
+    
+    
     
 //	private String CJKV_check(String input_str)
 //	{
