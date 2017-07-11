@@ -57,15 +57,13 @@ public class EchoApplication
 	private static Matcher m;
 	private static String space_pattern = "^[0-9]";
 	// Stock info
-//	private Vector code = new Vector();
-//	private Vector name = new Vector();
-	Vector<String> code = new Vector<String>();
-	Vector<String> name = new Vector<String>();
+	private Vector<String> code = new Vector<String>();
+	private Vector<String> name = new Vector<String>();
 	private final String USER_AGENT = "Mozilla/5.0";
 	// Output
-	JSONParser parser_output = new JSONParser();
-	JSONArray array_output;
-	JSONObject output_json;
+	private JSONParser parser_output = new JSONParser();
+	private JSONArray array_output;
+	private JSONObject output_json;
 	
     public static void main(String[] args) 
     {    	
