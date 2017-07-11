@@ -85,7 +85,7 @@ public class EchoApplication
     	
     	System.out.println("event: " + event);
         
-        String get_return;
+        String get_return = "";
 		// CJKV check
 //		String get_return = CJKV_check(event.getMessage().getText());
 //		return new TextMessage(get_return);
@@ -114,7 +114,7 @@ public class EchoApplication
         
         //return new TextMessage(get_return);
         //return new TextMessage(code.size()+"	"+name.size());        
-        return new TextMessage("Input: ("+event.getMessage().getText()+")"+getstockcode+"	"+get_stockname+"\n"+get_return);
+        return new TextMessage("Input: ("+event.getMessage().getText()+")	"+getstockcode+"	"+get_stockname+"\n"+get_return);
     }
 
     @EventMapping
