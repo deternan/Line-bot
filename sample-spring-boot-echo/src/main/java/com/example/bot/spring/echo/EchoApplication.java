@@ -58,9 +58,6 @@ public class EchoApplication
 	Vector<String> code = new Vector<String>();
 	Vector<String> name = new Vector<String>();
 	
-//	List codelist = new ArrayList();
-//	List namelist = new ArrayList();
-	
     public static void main(String[] args) 
     {    	
     	SpringApplication.run(EchoApplication.class, args);
@@ -94,8 +91,7 @@ public class EchoApplication
         }
         
         //return new TextMessage(get_return);
-        return new TextMessage(code.size()+"	"+name.size());
-        //return new TextMessage(codelist.size()+"	"+namelist.size());
+        return new TextMessage(code.size()+"	"+name.size());        
     }
 
     @EventMapping
@@ -211,9 +207,6 @@ public class EchoApplication
 		
 		code.add(code_temp);
 		name.add(name_temp);
-		
-//		codelist.add(code_temp);
-//		namelist.add(name_temp);
 	}
     
 //	private String CJKV_check(String input_str)
