@@ -145,7 +145,7 @@ public class EchoApplication
     	
     }
     
-    private void Read_Taiwan_StockID() throws Exception
+    private void Read_Taiwan_StockID() 
 	{		
 		String url = "http://isin.twse.com.tw/isin/C_public.jsp?strMode=2";
 		// JSoup Example 2 - Reading HTML page from URL
@@ -170,8 +170,6 @@ public class EchoApplication
 		boolean dig_check;
 		for(int i=0; i<div_embed_ele.size(); i++)
 		{
-			//System.out.println(i+"	"+div_embed_ele.get(i));
-			//System.out.println(i+"	"+div_embed_ele.get(i).childNodeSize());
 			// childNode()
 			if(div_embed_ele.get(i).childNodeSize() == 7){
 				//System.out.println(i+"	"+div_embed_ele.get(i).child(0));
