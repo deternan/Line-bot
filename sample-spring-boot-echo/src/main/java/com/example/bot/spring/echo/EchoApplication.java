@@ -64,7 +64,7 @@ public class EchoApplication
     }
 
     @EventMapping
-    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) 
+    public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws Exception
     {
     	Read_Taiwan_StockID();
     	
