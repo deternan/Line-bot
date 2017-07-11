@@ -141,7 +141,7 @@ public class EchoApplication
     	
     }
     
-    private void Read_Taiwan_StockID() 
+    private void Read_Taiwan_StockID() throws Exception
 	{		
 		String url = "http://isin.twse.com.tw/isin/C_public.jsp?strMode=2";
 		// JSoup Example 2 - Reading HTML page from URL
