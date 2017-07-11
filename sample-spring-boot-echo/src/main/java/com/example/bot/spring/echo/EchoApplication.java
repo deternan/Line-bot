@@ -19,6 +19,8 @@
 
 package com.example.bot.spring.echo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,13 +49,15 @@ public class EchoApplication
 	boolean digital_check;
 	boolean character_check;
 	// Pattern expression
-	private Pattern p;
-	private Matcher m;
-	private String space_pattern = "^[0-9]";
+	private static Pattern p;
+	private static Matcher m;
+	private static String space_pattern = "^[0-9]";
 	// Stock info
-	private Vector code = new Vector();
-	private Vector name = new Vector();
+//	private Vector code = new Vector();
+//	private Vector name = new Vector();
 	
+	List codelist = new ArrayList();
+	List namelist = new ArrayList();
 	
     public static void main(String[] args) 
     {    	
@@ -88,7 +92,8 @@ public class EchoApplication
         }
         
         //return new TextMessage(get_return);
-        return new TextMessage(code.size()+"	"+name.size());
+        //return new TextMessage(code.size()+"	"+name.size());
+        return new TextMessage(codelist.size()+"	"+namelist.size());
     }
 
     @EventMapping
@@ -204,8 +209,11 @@ public class EchoApplication
 		String code_temp = input.substring(0, 4);
 		String name_temp = input.substring(5, input.length());
 		
-		code.add(code_temp);
-		name.add(name_temp);
+//		code.add(code_temp);
+//		name.add(name_temp);
+		
+		codelist.add(code_temp);
+		namelist.add(name_temp);
 	}
     
 //	private String CJKV_check(String input_str)
