@@ -112,7 +112,7 @@ public class EchoApplication
         
         //return new TextMessage(get_return);
         //return new TextMessage(code.size()+"	"+name.size());        
-        return new TextMessage("Input: ("+event.getMessage().getText()+")	"+getstockcode+"	"+get_stockname+"\n"+get_return);
+        return new TextMessage("Input: ("+event.getMessage().getText()+")	"+getstockcode+"	"+get_stockname);
     }
 
     @EventMapping
