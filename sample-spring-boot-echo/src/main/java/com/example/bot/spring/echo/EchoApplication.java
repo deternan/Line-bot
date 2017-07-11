@@ -91,8 +91,8 @@ public class EchoApplication
 //		return new TextMessage(get_return);
         //return new TextMessage("Auto:  "+event.getMessage().getText());
         
-        String get_stockname;
-		String getstockcode;
+        String get_stockname = "";
+		String getstockcode = "";
         
         // Digital check
         //get_return = Regular_Expression_Digital(event.getMessage().getText());
@@ -114,7 +114,7 @@ public class EchoApplication
         
         //return new TextMessage(get_return);
         //return new TextMessage(code.size()+"	"+name.size());        
-        return new TextMessage("Input: ("+event.getMessage().getText()+")"+getstockcode+"	"+get_stockname);
+        return new TextMessage("Input: ("+event.getMessage().getText()+")"+getstockcode+"	"+get_stockname+"\n"+get_return);
     }
 
     @EventMapping
