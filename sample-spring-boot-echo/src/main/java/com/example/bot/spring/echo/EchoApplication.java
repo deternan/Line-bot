@@ -13,12 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  * 
- * Last updated: July 10, 2017 09:24 PM
+ * Last updated: July 11, 2017 09:31 PM
  * 
  */
 
 package com.example.bot.spring.echo;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -57,6 +61,11 @@ public class EchoApplication
 //	private Vector name = new Vector();
 	Vector<String> code = new Vector<String>();
 	Vector<String> name = new Vector<String>();
+	private final String USER_AGENT = "Mozilla/5.0";
+	// Output
+	JSONParser parser_output = new JSONParser();
+	JSONArray array_output;
+	JSONObject output_json;
 	
     public static void main(String[] args) 
     {    	
@@ -66,7 +75,13 @@ public class EchoApplication
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws Exception
     {
-    	Read_Taiwan_StockID();
+    	try{
+    		code.clone();
+    		name.clear();
+    		Read_Taiwan_StockID();	
+    	}catch(Exception e){
+            return null;            // Always must return something
+        }
     	
     	System.out.println("event: " + event);
         
@@ -76,22 +91,30 @@ public class EchoApplication
 //		return new TextMessage(get_return);
         //return new TextMessage("Auto:  "+event.getMessage().getText());
         
+        String get_stockname;
+		String getstockcode;
+        
         // Digital check
         //get_return = Regular_Expression_Digital(event.getMessage().getText());
         digital_check = Regular_Expression_Digital(event.getMessage().getText());
         if(digital_check == true){
         	if(event.getMessage().getText().length() == 4){
-        		get_return = "4 digital";
-        		GetStockInfor(get_return);
+        		//get_return = "4 digital";
+        		getstockcode = Return_code(event.getMessage().getText());
+        		// Get Google finance data
+    			//Google_data(getstockcode);
         	}else{
         		get_return = "Please input 4 digital code or Stock name";
         	}        	
         }else{
-        	get_return = "illegal";
+        	//get_return = "illegal";
+        	get_stockname = Return_name(event.getMessage().getText());
+        	//Google_data(event.getMessage().getText());
         }
         
         //return new TextMessage(get_return);
-        return new TextMessage(code.size()+"	"+name.size());        
+        //return new TextMessage(code.size()+"	"+name.size());        
+        return new TextMessage("Input: ("+event.getMessage().getText()+")"+getstockcode+"	"+get_stockname);
     }
 
     @EventMapping
@@ -118,28 +141,44 @@ public class EchoApplication
     	return digital_temp;
     }
     
-//    private boolean Regular_Expression_Chines(String input_str)
-//    {
-//    	boolean check;
-//		String return_str = "";
-//		check = input_str.codePoints().anyMatch(codepoint ->
-//	            Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.HAN);
-//		
-//		if(check == true){
-//			//return_str = "Non English";
-//			check = true;
-//		}else{
-//			//return_str = "English";
-//			check = false;
-//		}		
-//		
-//		return check;
-//    }
+    private void Google_data(String code) throws Exception
+	{
+		String url = "http://finance.google.com/finance/info?client=ig&q=TPE:" + code;
+		System.out.println(url);
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+		// optional default is GET
+		con.setRequestMethod("GET");
+		//add request header
+		con.setRequestProperty("User-Agent", USER_AGENT);
+		int responseCode = con.getResponseCode();
+//		System.out.println("\nSending 'GET' request to URL : " + url);
+//		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			//System.out.println(inputLine);
+			response.append(inputLine);			
+		}
+		in.close();	
+		String result_str = response.toString().substring(3, response.toString().length());
+		//System.out.println(response.toString().substring(3, response.toString().length()));
+		
+		// String to Json
+		String_to_Json(result_str);
+	}
     
-    private void GetStockInfor(String input)
-    {
-    	
-    }
+    private void String_to_Json(String input) throws Exception
+	{
+		// String to JsonArray
+		//JSONParser parser_output = new JSONParser();
+		array_output = (JSONArray)parser_output.parse(input);
+		//System.out.println(((JSONObject)array_output.get(0)));
+		output_json = (JSONObject)array_output.get(0);		
+	}
     
     private void Read_Taiwan_StockID() throws Exception
 	{		
@@ -208,6 +247,24 @@ public class EchoApplication
 		code.add(code_temp);
 		name.add(name_temp);
 	}
+    
+//  private boolean Regular_Expression_Chines(String input_str)
+//  {
+//  	boolean check;
+//		String return_str = "";
+//		check = input_str.codePoints().anyMatch(codepoint ->
+//	            Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.HAN);
+//		
+//		if(check == true){
+//			//return_str = "Non English";
+//			check = true;
+//		}else{
+//			//return_str = "English";
+//			check = false;
+//		}		
+//		
+//		return check;
+//  }
     
 //	private String CJKV_check(String input_str)
 //	{
