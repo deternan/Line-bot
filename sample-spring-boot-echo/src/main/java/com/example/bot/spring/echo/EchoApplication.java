@@ -248,6 +248,34 @@ public class EchoApplication
 		name.add(name_temp);
 	}
     
+    private String Return_name(String code_str)
+	{
+		String return_name = "";;
+		for(int i=0; i<code.size(); i++)
+		{
+			if(code.get(i).toString().equalsIgnoreCase(code_str)){
+				return_name = name.get(i).toString();
+				break;
+			}
+		}
+		
+		return return_name;
+	}
+	
+	private String Return_code(String name_str)
+	{
+		String return_code = "";
+		for(int i=0; i<name.size(); i++)
+		{
+			if(name.get(i).toString().equalsIgnoreCase(name_str)){
+				return_code = code.get(i).toString();
+				break;
+			}
+		}
+		
+		return return_code;
+	}
+    
 //  private boolean Regular_Expression_Chines(String input_str)
 //  {
 //  	boolean check;
