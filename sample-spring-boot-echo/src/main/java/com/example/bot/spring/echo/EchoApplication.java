@@ -73,13 +73,13 @@ public class EchoApplication
     @EventMapping
     public TextMessage handleTextMessageEvent(MessageEvent<TextMessageContent> event) throws Exception
     {
-    	try{
-    		code.clone();
-    		name.clear();
-    		Read_Taiwan_StockID();	
-    	}catch(Exception e){
-            return null;            // Always must return something
-        }
+//    	try{
+//    		code.clone();
+//    		name.clear();
+//    		Read_Taiwan_StockID();	
+//    	}catch(Exception e){
+//            return null;            // Always must return something
+//        }
     	
     	System.out.println("event: " + event);
         
