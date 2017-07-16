@@ -109,8 +109,7 @@ public class EchoApplication
         	get_return = "illegal";
 //        	get_stockname = Return_name(event.getMessage().getText());
         	//Google_data(event.getMessage().getText());
-        }
-        
+        }        
         return new TextMessage(get_return);
         //return new TextMessage(code.size()+"	"+name.size());        
         //return new TextMessage("Input: ("+event.getMessage().getText()+")	"+getstockcode+"	"+get_stockname);
