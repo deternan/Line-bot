@@ -7,6 +7,9 @@
 
 ## How to construct line bot 
 
+Example
+https://github.com/line/line-bot-sdk-java/tree/master/sample-spring-boot-echo
+
 Gradle: 
 https://spring.io/guides/gs/gradle/
  
