@@ -99,7 +99,7 @@ public class EchoApplication
         if(digital_check == true){
         	if(event.getMessage().getText().length() == 4){
         		get_return = "4 digital";
-        		getstockcode = Return_code(event.getMessage().getText());
+//        		getstockcode = Return_code(event.getMessage().getText());
         		// Get Google finance data
     			//Google_data(getstockcode);
         	}else{
@@ -107,7 +107,7 @@ public class EchoApplication
         	}        	
         }else{
         	get_return = "illegal";
-        	get_stockname = Return_name(event.getMessage().getText());
+//        	get_stockname = Return_name(event.getMessage().getText());
         	//Google_data(event.getMessage().getText());
         }
         
